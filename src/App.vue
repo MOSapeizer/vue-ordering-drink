@@ -5,9 +5,6 @@
       <button @click="clickRight" class="half-right">熱</button>
       <span class="content">{{ order.name }}</span>
       <scale unit="糖" :class="[{ hidden: scaleHidden }, levelBaseColor]" @click="setSugar"></scale>
-      <!-- <div class="scale" :class="{ hidden: scaleHidden }">
-        <span v-for="unit in scale" @click="chooseSugar(unit)" :class="[levelBaseColor, unit.level]">{{ unit.sugar }}</span>
-      </div> -->
     </div>
     <p>{{ orderOutput }}</p>
   </div>
@@ -25,11 +22,6 @@ export default {
     return {
       scaleBaseColor: '',
       scaleHidden: true,
-      scale: [{ sugar: '無糖', level: 'level-1' },
-                  { sugar: '微糖', level: 'level-2' },
-                  { sugar: '半糖', level: 'level-3' },
-                  { sugar: '少糖', level: 'level-4' },
-                  { sugar: '全糖', level: 'level-5' }],
       order: {
         name: '蜂蜜紅茶',
         temperture: '',
