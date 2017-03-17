@@ -1,6 +1,6 @@
 <template>
   <div :class="{ scale }">
-    <span v-for="unit in scale" @click="chooseSugar(unit)" :class=" unit.level">{{ unit.sugar }}</span>
+    <span v-for="unit in scale" @click="chooseLevel(unit)" :class=" unit.level">{{ unit.sugar }}</span>
   </div>
 </template>
 
@@ -18,7 +18,7 @@ export default {
     }
   },
   methods: {
-    chooseSugar (unit) {
+    chooseLevel (unit) {
       this.hidden = false
       this.$emit('click', unit.sugar)
     }

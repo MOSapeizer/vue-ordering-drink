@@ -1,0 +1,132 @@
+<template>
+  <div class="order">
+    <div class="normal">
+      <button @click="clickLeft" class="half-left">冰</button>
+      <button @click="clickRight" class="half-right">熱</button>
+      <span class="content">{{ name }}</span>
+      <scale unit="冰" :class="[{ hidden: scaleHidden }, levelBaseColor]" @click="setIceLevel"></scale>
+      <scale unit="糖" :class="[{ hidden: sugarScaleHidden }, levelBaseColor]" @click="setSugar"></scale>
+    </div>
+    <p>你點的是：{{ orderOutput }}</p>
+  </div>
+</template>
+
+<script>
+import Scale from '@/components/Scale'
+
+export default {
+  name: 'orderButton',
+  components: {
+    Scale
+  },
+  props: ['name'],
+  data () {
+    return {
+      scaleBaseColor: '',
+      scaleHidden: true,
+      sugarScaleHidden: true,
+      order: {
+        name: '',
+        temperture: '',
+        sugar: ''
+      }
+    }
+  },
+  methods: {
+    clickLeft () {
+      this.showUpScale('cold')
+      this.scaleHidden = false
+      this.order.name = this.name
+    },
+    clickRight () {
+      this.showUpScale('hot')
+      this.sugarScaleHidden = false
+      this.order.name = this.name
+      this.order.temperture = '熱'
+    },
+    showUpScale (colorState) {
+      this.scaleBaseColor = colorState
+    },
+    setSugar (unit) {
+      this.sugarScaleHidden = true
+      this.order.sugar = unit
+    },
+    setIceLevel (unit) {
+      this.scaleHidden = true
+      this.sugarScaleHidden = false
+      this.order.temperture = unit
+    }
+  },
+  computed: {
+    levelBaseColor () {
+      return 'level-' + this.scaleBaseColor + '-base'
+    },
+    orderOutput () {
+      return `${this.order.name} ${this.order.temperture} ${this.order.sugar}`
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+button {
+  outline: none;
+}
+
+.normal {
+  border-radius: 4px;
+  background-color: #757575;
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 28px;
+  margin: 5px;
+  padding: 20px;
+  position: relative;
+  text-align: center;
+  transition: all 0.5s;
+  width: 200px;
+}
+
+.normal .half-left, .normal .half-right {
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 28px;
+  opacity: 0;
+  padding: 20px;
+  position: absolute;
+  text-align: center;
+  top: 0px;
+  width: 50%;
+}
+
+.half-left {
+  background-color: #ff7575;
+  border-radius: 4px 0 0 4px;
+  display: inline-block;
+  left: 0px;
+}
+
+.half-right {
+  background-color: #7575cc;
+  border-radius: 0 4px 4px 0;
+  display: inline-block;
+  right: 0px;
+}
+
+.normal:hover .half-left {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.normal:hover .half-right {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.hidden {
+  display: none !important; 
+}
+</style>
