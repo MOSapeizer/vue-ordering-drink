@@ -1,13 +1,10 @@
 <template>
   <div class="order">
     <div class="normal">
-      <button @click="clickLeft" class="half-left">冰</button>
-      <button @click="clickRight" class="half-right">熱</button>
       <span class="content">{{ name }}</span>
-      <scale unit="冰" :class="[{ hidden: scaleHidden }, levelBaseColor]" @click="setIceLevel"></scale>
-      <scale unit="糖" :class="[{ hidden: sugarScaleHidden }, levelBaseColor]" @click="setSugar"></scale>
+      <button v-for="type in typeList" @click="chooseType(type)" :class="type.class">{{ type.name }}</button>
+      <scale v-if="scaleActive" :unit="scaleUnit" :class="levelBaseColor" @click="setOrder"></scale>
     </div>
-    <p>你點的是：{{ orderOutput }}</p>
   </div>
 </template>
 
@@ -22,8 +19,22 @@ export default {
   props: ['name'],
   data () {
     return {
+      scaleUnit: '',
+      scaleActive: false,
       scaleBaseColor: '',
-      scaleHidden: true,
+      typeList: [
+        { name: '冰',
+          scalable: true,
+          class: 'half-left',
+          backgroundColor: 'cold'
+        },
+        {
+          name: '熱',
+          scalable: false,
+          class: 'half-right',
+          backgroundColor: 'hot'
+        }
+      ],
       sugarScaleHidden: true,
       order: {
         name: '',
@@ -33,36 +44,42 @@ export default {
     }
   },
   methods: {
-    clickLeft () {
-      this.showUpScale('cold')
-      this.scaleHidden = false
+    showSugarScale () {
+      this.scaleUnit = '糖'
+      this.scaleActive = true
+    },
+    chooseType (type) {
       this.order.name = this.name
+      if (type.name === '冰') {
+        this.scaleUnit = type.name
+        this.scaleBaseColor = type.backgroundColor
+        this.scaleActive = true
+      } else if (type.name === '熱') {
+        this.order.temperture = type.name
+        this.scaleBaseColor = type.backgroundColor
+        this.showSugarScale()
+      }
     },
-    clickRight () {
-      this.showUpScale('hot')
-      this.sugarScaleHidden = false
-      this.order.name = this.name
-      this.order.temperture = '熱'
+    setOrder (message) {
+      if (this.order.temperture === '') {
+        this.order.temperture = message
+        this.showSugarScale()
+      } else {
+        this.order.sugar = message
+        this.scaleActive = false
+        this.$emit('check', this.order)
+        this.reset()
+      }
     },
-    showUpScale (colorState) {
-      this.scaleBaseColor = colorState
-    },
-    setSugar (unit) {
-      this.sugarScaleHidden = true
-      this.order.sugar = unit
-    },
-    setIceLevel (unit) {
-      this.scaleHidden = true
-      this.sugarScaleHidden = false
-      this.order.temperture = unit
+    reset () {
+      for (var key in this.order) {
+        this.order[key] = ''
+      }
     }
   },
   computed: {
     levelBaseColor () {
       return 'level-' + this.scaleBaseColor + '-base'
-    },
-    orderOutput () {
-      return `${this.order.name} ${this.order.temperture} ${this.order.sugar}`
     }
   }
 }
@@ -102,6 +119,16 @@ button {
   width: 50%;
 }
 
+.normal:hover .half-left {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.normal:hover .half-right {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
 .half-left {
   background-color: #ff7575;
   border-radius: 4px 0 0 4px;
@@ -114,19 +141,5 @@ button {
   border-radius: 0 4px 4px 0;
   display: inline-block;
   right: 0px;
-}
-
-.normal:hover .half-left {
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.normal:hover .half-right {
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.hidden {
-  display: none !important; 
 }
 </style>

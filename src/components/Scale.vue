@@ -1,26 +1,28 @@
 <template>
   <div :class="{ scale }">
-    <span v-for="unit in scale" @click="chooseLevel(unit)" :class=" unit.level">{{ unit.sugar }}</span>
+    <span v-for="unit in scale" @click="chooseLevel(unit)" :class="unit.class">{{ fullLevelName(unit) }}</span>
   </div>
 </template>
 
 <script>
 export default {
   name: 'scale',
-  props: ['unit', 'hidden'],
+  props: ['unit'],
   data () {
     return {
-      scale: [{ sugar: `無${this.unit}`, level: 'level-1' },
-              { sugar: `微${this.unit}`, level: 'level-2' },
-              { sugar: `半${this.unit}`, level: 'level-3' },
-              { sugar: `少${this.unit}`, level: 'level-4' },
-              { sugar: `全${this.unit}`, level: 'level-5' }]
+      scale: [{ level: '無', class: 'level-1' },
+              { level: '微', class: 'level-2' },
+              { level: '半', class: 'level-3' },
+              { level: '少', class: 'level-4' },
+              { level: '全', class: 'level-5' }]
     }
   },
   methods: {
     chooseLevel (unit) {
-      this.hidden = false
-      this.$emit('click', unit.sugar)
+      this.$emit('click', this.fullLevelName(unit))
+    },
+    fullLevelName (unit) {
+      return unit.level + this.unit
     }
   }
 }
