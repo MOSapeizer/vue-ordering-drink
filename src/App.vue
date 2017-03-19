@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <order-button v-for="drink in drinkList" @check="saveOrder" :name="drink"></order-button>
+    <order-button v-for="drink in drinkList" :key="drink.id" @check="saveOrder" :name="drink"></order-button>
     <ol class="order-list">
       <span>你點的是：</span>
       <li v-for="order in orderList">
@@ -27,11 +27,20 @@ export default {
   },
   methods: {
     saveOrder (order) {
+      let lastId = this.lastOrder().id || 0
       this.orderList.push({
+        id: lastId + 1,
         name: order.name,
         temperture: order.temperture,
         sugar: order.sugar
       })
+    },
+    lastOrder () {
+      let lastOrder = this.orderList[this.orderList.length - 1]
+      if (lastOrder) {
+        return lastOrder
+      }
+      return {}
     },
     print (order) {
       return `${order.name} ${order.temperture} ${order.sugar}`
@@ -64,7 +73,7 @@ button {
   border-radius: 4px;
   border: none;
   color: #FFFFFF;
-  font-size: 20px;
+  font-size: 16px;
   padding: 4px 8px;
   position: relative;
   text-align: center;

@@ -4,6 +4,7 @@
       <span class="content">{{ name }}</span>
       <button v-for="type in typeList" @click="chooseType(type)" :class="type.class">{{ type.name }}</button>
       <scale v-if="scaleActive" :unit="scaleUnit" :class="levelBaseColor" @click="setOrder"></scale>
+      <button v-if="scaleActive" @click="reset" class="cancel">x</button>
     </div>
   </div>
 </template>
@@ -66,7 +67,6 @@ export default {
         this.showSugarScale()
       } else {
         this.order.sugar = message
-        this.scaleActive = false
         this.$emit('check', this.order)
         this.reset()
       }
@@ -75,6 +75,7 @@ export default {
       for (var key in this.order) {
         this.order[key] = ''
       }
+      this.scaleActive = false
     }
   },
   computed: {
@@ -97,20 +98,33 @@ button {
   border: none;
   color: #FFFFFF;
   cursor: pointer;
-  font-size: 28px;
+  font-size: 20px;
   margin: 5px;
   padding: 20px;
   position: relative;
   text-align: center;
   transition: all 0.5s;
-  width: 200px;
+  min-width: 120px;
+}
+
+.cancel {
+  border-radius: 16px;
+  border: none;
+  background-color: #cc3333;
+  color: white;
+  position: absolute;
+  right: -10px;
+  top: -12px;
+  font-size: 20px;
+  padding: 0px 8px 4px;
+  text-align: center;
 }
 
 .normal .half-left, .normal .half-right {
   border: none;
   color: #FFFFFF;
   cursor: pointer;
-  font-size: 28px;
+  font-size: 20px;
   opacity: 0;
   padding: 20px;
   position: absolute;
