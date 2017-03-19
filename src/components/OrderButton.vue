@@ -99,7 +99,7 @@ button {
   color: #FFFFFF;
   cursor: pointer;
   font-size: 20px;
-  margin: 5px;
+  margin: 8px;
   padding: 20px;
   position: relative;
   text-align: center;

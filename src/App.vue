@@ -1,22 +1,36 @@
 <template>
   <div class="app">
-    <order-button v-for="drink in drinkList" :key="drink.id" @check="saveOrder" :name="drink"></order-button>
-    <ol class="order-list">
-      <span>你點的是：</span>
-      <li v-for="order in orderList">
-        <span :style="{ backgroundColor: orderColor(order) }" class="order">{{ print(order) }}</span>
-        <button :style="{ backgroundColor: orderColor(order) }" @click="remove(order)" class="cancel">Ｘ</button>
-      </li>
-    </ol>
+    <div class="main">
+      <category name="茶類">
+        <order-button v-for="drink in drinkList" :key="drink.id" @check="saveOrder" :name="drink"></order-button>
+      </category>
+      <category name="茶類">
+        <order-button v-for="drink in drinkList" :key="drink.id" @check="saveOrder" :name="drink"></order-button>
+      </category>
+      <category name="茶類">
+        <order-button v-for="drink in drinkList" :key="drink.id" @check="saveOrder" :name="drink"></order-button>
+      </category>
+    </div>
+    <div class="aside">
+      <ol class="order-list">
+        <span>清單：</span>
+        <li v-for="order in orderList">
+          <span :style="{ backgroundColor: orderColor(order) }" class="order">{{ print(order) }}</span>
+          <button :style="{ backgroundColor: orderColor(order) }" @click="remove(order)" class="cancel">Ｘ</button>
+        </li>
+      </ol>
+    </div>
   </div>
 </template>
 
 <script>
+import Category from '@/components/Category'
 import OrderButton from '@/components/OrderButton'
 
 export default {
   name: 'app',
   components: {
+    Category,
     OrderButton
   },
   data () {
@@ -61,8 +75,29 @@ export default {
 </script>
 
 <style scoped>
+
+.app {
+  display: flex;
+  width: 100%;
+}
+
+.main {
+  display: inline-block;
+  flex: 7;
+  margin: 1em;
+}
+
+.aside {
+  display: inline-block;
+  flex: 3;
+}
+
 button {
   outline: none;
+}
+
+ol {
+  list-style: none;
 }
 
 .order {
