@@ -1,6 +1,6 @@
 # 飲料機
 
-> 就飲料機，你不懂我也很難解釋。
+> 就飲料機，看[demo](https://mosapeizer.github.io/vue-ordering-drink/dist/)比較快。
 
 ## Build Setup
 
