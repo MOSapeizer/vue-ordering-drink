@@ -2,8 +2,8 @@
   <div class="order">
     <div class="normal">
       <span class="content">{{ name }}</span>
-      <button v-for="type in typeList" @click="chooseType(type)" :class="type.class">{{ type.name }}</button>
-      <scale v-if="scaleActive" :unit="scaleUnit" :class="levelBaseColor" @click="setOrder"></scale>
+      <button v-for="type in typeList" @click="chooseType(type)" :class="type.class" :style="{ backgroundColor: type.backgroundColor }">{{ type.name }}</button>
+      <scale v-if="scaleActive" :unit="scaleUnit" :levels="scale" :color="scaleBaseColor" @click="setOrder"></scale>
       <button v-if="scaleActive" @click="reset" class="cancel">x</button>
     </div>
   </div>
@@ -20,20 +20,21 @@ export default {
   props: ['name'],
   data () {
     return {
+      scale: [],
       scaleUnit: '',
       scaleActive: false,
-      scaleBaseColor: '',
+      scaleBaseColor: 'inherit',
       typeList: [
         { name: '冰',
           scalable: true,
           class: 'half-left',
-          backgroundColor: 'cold'
+          backgroundColor: '#ff7575'
         },
         {
           name: '熱',
           scalable: false,
           class: 'half-right',
-          backgroundColor: 'hot'
+          backgroundColor: '#5493B2'
         }
       ],
       sugarScaleHidden: true,
@@ -46,12 +47,14 @@ export default {
   },
   methods: {
     showSugarScale () {
+      this.scale = ['無', '微', '半', '少', '全']
       this.scaleUnit = '糖'
       this.scaleActive = true
     },
     chooseType (type) {
       this.order.name = this.name
       if (type.name === '冰') {
+        this.scale = ['去', '微', '半', '少', '全']
         this.scaleUnit = type.name
         this.scaleBaseColor = type.backgroundColor
         this.scaleActive = true
@@ -76,11 +79,6 @@ export default {
         this.order[key] = ''
       }
       this.scaleActive = false
-    }
-  },
-  computed: {
-    levelBaseColor () {
-      return 'level-' + this.scaleBaseColor + '-base'
     }
   }
 }
@@ -144,14 +142,12 @@ button {
 }
 
 .half-left {
-  background-color: #ff7575;
   border-radius: 4px 0 0 4px;
   display: inline-block;
   left: 0px;
 }
 
 .half-right {
-  background-color: #7575cc;
   border-radius: 0 4px 4px 0;
   display: inline-block;
   right: 0px;

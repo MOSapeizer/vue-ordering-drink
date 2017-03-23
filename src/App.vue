@@ -67,7 +67,7 @@ export default {
       if (order.temperture.includes('冰')) {
         return '#ff7575'
       } else if (order.temperture.includes('熱')) {
-        return '#7575cc'
+        return '#5493B2'
       }
     }
   }
